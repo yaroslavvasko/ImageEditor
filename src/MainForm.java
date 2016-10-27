@@ -144,6 +144,58 @@ public class MainForm extends JFrame{
         });
         menuCombines.add(menuItemCombineImages);
 
+        JMenuItem menuItemCombineImagesMax = new JMenuItem(" Combine Images Max");
+        menuItemCombineImagesMax.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        image.picture.combineImagesMax(picture2);
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesMax);
+
+        JMenuItem menuItemCombineImagesCycle = new JMenuItem(" Combine Images Cycle");
+        menuItemCombineImagesCycle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        image.picture.combineImagesCycle(picture2);
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesCycle);
+
 
         return menuBar;
     }
