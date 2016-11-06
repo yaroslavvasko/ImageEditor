@@ -75,4 +75,23 @@ public class Filters {
             }
         }
     }
+
+    public void filterGrayLUT(Picture picture, int blevel) {
+        int delta = 2 ^ 8 / 2 ^ blevel;
+        int[] lut = new int[256];
+        for(int i = 0; i < 256; i++){
+            lut[i] = (int) Math.floor(Math.max((i - delta/2 -1)/delta,0))*delta + (delta/2 - 1);
+        }
+
+        for(int i = 0; i<picture.getWidth(); i++){
+            for(int k = 0; k<picture.getHeight(); k++){
+                Color c = picture.getColor(i, k);
+                int r = c.getRed();
+                int g = c.getGreen();
+                int b = c.getBlue();
+                picture.setColor(i, k, new Color(lut[r], lut[g], lut[b]));
+            }
+        }
+    }
+
 }

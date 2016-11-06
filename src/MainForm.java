@@ -2,6 +2,8 @@ import functionality.*;
 import history.HistoryItem;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import java.awt.*;
@@ -208,6 +210,28 @@ public class MainForm extends JFrame{
         });
         menuFilters.add(menuItemSepiaFilter);
 
+        JMenuItem menuItemLUTFilter = new JMenuItem(" LUT filter");
+        menuItemLUTFilter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    String[] values = {"1", "2", "3", "4", "5", "8", "16"};
+
+                    Object selected = JOptionPane.showInputDialog(null, "What is LUT level", "Selection", JOptionPane.DEFAULT_OPTION, null, values, "0");
+                    if ( selected!= null ){
+                        String selectedString = selected.toString();
+
+                        Filters filters = new Filters();
+                        filters.filterGrayLUT(image.picture, Integer.parseInt(selectedString));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Image shifted"));
+                        image.repaint();
+                    }else{
+                        System.out.println("User cancelled");
+                    }
+                }
+            }
+        });
+        menuFilters.add(menuItemLUTFilter);
+
         // ------------------------ T R A N S F O R M A T I O N -----------------------------------------------------
 
         JMenuItem menuItemRotate = new JMenuItem(" Rotate");
@@ -230,6 +254,27 @@ public class MainForm extends JFrame{
             }
         });
         menuTransformations.add(menuItemRotate);
+
+        JMenuItem menuItemShifting = new JMenuItem("Shift image");
+        menuItemShifting.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    String[] values = {"10", "20", "30", "40", "50", "60", "70", "80", "90"};
+
+                    Object selected = JOptionPane.showInputDialog(null, "What is the angle of rotation", "Selection", JOptionPane.DEFAULT_OPTION, null, values, "0");
+                    if ( selected!= null ){
+                        String selectedString = selected.toString();
+                        Transformation transform = new Transformation();
+                        transform.imageShifting(image.picture, Integer.parseInt(selectedString));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Image shifted"));
+                        image.repaint();
+                    }else{
+                        System.out.println("User cancelled");
+                    }
+                }
+            }
+        });
+        menuTransformations.add(menuItemShifting);
 
         // ------------------------ C O M B I N A T I O N S ---------------------------------------------------------
 
