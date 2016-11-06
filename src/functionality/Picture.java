@@ -1,3 +1,5 @@
+package functionality;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -5,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.function.DoubleToIntFunction;
 
 /**
  * Created by yaros on 23.10.2016.
@@ -118,46 +119,6 @@ public class Picture {
         filename = file.getName();
     }
 
-    public void filterGray(){
-        for(int i = 0; i<getWidth(); i++){
-            for(int k = 0; k<getHeight(); k++){
-                Color c = getColor(i, k);
-                int r = c.getRed();
-                int g = c.getGreen();
-                int b = c.getBlue();
-                int grayLevel = (r + g + b) / 3;
-                setColor(i, k, new Color(grayLevel, grayLevel, grayLevel));
-            }}
-    }
-
-    public void filterRed(){
-        for(int i = 0; i<getWidth(); i++){
-            for(int k = 0; k<getHeight(); k++){
-                int r = getColor(i, k).getRed();
-                setColor(i, k, new Color(r, 0, 0));
-            }
-        }
-    };
-
-    public void filterGreen(){
-        for(int i = 0; i<getWidth(); i++){
-            for(int k = 0; k<getHeight(); k++){
-                int g = getColor(i, k).getGreen();
-                setColor(i, k, new Color(0, g, 0));
-
-            }
-        }
-    };
-
-
-    public void filterBlue(){
-        for(int i = 0; i<getWidth(); i++){
-            for(int k = 0; k<getHeight(); k++){
-                int b =  getColor(i, k).getBlue();
-                setColor(i, k, new Color(0, 0, b));
-            }
-        }
-    };
 
     public Color getColor(int col, int row) {
         validateCol(col);
@@ -174,88 +135,6 @@ public class Picture {
         else                   image.setRGB(col, height - row - 1, color.getRGB());
     }
 
-    public Color combineColors(Color first, Color second){
-        int r = first.getRed();
-        int g = first.getRed();
-        int b = first.getBlue();
-        int r1 = second.getRed();
-        int g1 = second.getGreen();
-        int b1 = second.getGreen();
-        return new Color((int)(r*0.3+r1*0.7), (int)(g*0.3+g1*0.7),(int)(b*0.3+b1*0.7));
-    }
-
-
-    // Image(x,y) = min( maks, Image1(x,y) + Image2(x,y) )
-
-    public Color combineColorsMax(Color first, Color second){
-        int r = first.getRed();
-        int g = first.getRed();
-        int b = first.getBlue();
-        int r1 = second.getRed();
-        int g1 = second.getGreen();
-        int b1 = second.getGreen();
-        return new Color(Math.min(255, r+r1), Math.min(255, g+g1), Math.min(255, b+b1));
-    }
-
-    // Image(x,y) = ( Image1(x,y) + Image2(x,y) ) % 256
-    public Color combineColorsCycle(Color first, Color second){
-        int r = first.getRed();
-        int g = first.getRed();
-        int b = first.getBlue();
-        int r1 = second.getRed();
-        int g1 = second.getGreen();
-        int b1 = second.getGreen();
-        return new Color((r+r1)%256, (g+g1)%256, (b+b1)%256);
-        //return new Color(255 - (r+r1)%256, 255 - (g+g1)%256, 255 - (b+b1)%256);
-    }
-
-    // delta=2B/2newB
-
-   // L′(x,y)=floor(max((L(x,y)−(delta2)−1)delta,0))*delta+(delta2−1)
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void combineImages(Picture picture){
-
-        if(getWidth()==picture.getWidth() && getHeight()==picture.getHeight())
-        {
-            for(int i = 0; i<getWidth(); i++){
-                for(int k = 0; k<getHeight(); k++) {
-                    Color c1 = getColor(i, k);
-                    Color c2 = picture.getColor(i,k);
-                    setColor(i,k,combineColors(c1, c2));
-                }
-            }
-        }
-    }
-
-    public void combineImagesMax(Picture picture){
-
-        if(getWidth()==picture.getWidth() && getHeight()==picture.getHeight())
-        {
-            for(int i = 0; i<getWidth(); i++){
-                for(int k = 0; k<getHeight(); k++) {
-                    Color c1 = getColor(i, k);
-                    Color c2 = picture.getColor(i,k);
-                    setColor(i,k,combineColorsMax(c1, c2));
-                }
-            }
-        }
-    }
-
-    public void combineImagesCycle(Picture picture){
-
-        if(getWidth()==picture.getWidth() && getHeight()==picture.getHeight())
-        {
-            for(int i = 0; i<getWidth(); i++){
-                for(int k = 0; k<getHeight(); k++) {
-                    Color c1 = getColor(i, k);
-                    Color c2 = picture.getColor(i,k);
-                    setColor(i,k,combineColorsCycle(c1, c2));
-                }
-            }
-        }
-    }
 
     private void validateRow(int row) {
         if (row < 0 || row >= getHeight())

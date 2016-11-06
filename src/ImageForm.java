@@ -1,4 +1,7 @@
+import functionality.Picture;
+
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 /**
@@ -32,6 +35,27 @@ public class ImageForm extends JFrame{
         setResizable(false);
         pack();
         setVisible(true);
+    }
+
+    public ImageForm(Picture picture) {
+        super(picture.getFilename());
+
+        picture = new Picture(picture);
+        setContentPane(picture.getImageLabel());
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        pack();
+        setVisible(true);
+    }
+
+
+    public void setPicture(Picture p){
+
+        for(int i = 0; i<picture.getWidth(); i++){
+            for(int k = 0; k<picture.getHeight(); k++){
+                picture.setColor(i, k, p.getColor(i,k));
+            }
+        }
     }
 
 }

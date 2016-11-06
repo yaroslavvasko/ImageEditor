@@ -1,8 +1,11 @@
+import functionality.*;
+import history.HistoryItem;
+
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 
 /**
@@ -12,6 +15,7 @@ public class MainForm extends JFrame{
     private JPanel mainPanel;
     private JMenuBar menuBar;
     private ImageForm image;
+    private HistoryForm hForm;
 
     public MainForm(String title) {
         super(title);
@@ -28,19 +32,68 @@ public class MainForm extends JFrame{
         menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("File");
         JMenu menuFilters = new JMenu("Filters");
+        JMenu menuTransformations = new JMenu("Transformation");
         JMenu menuCombines = new JMenu("Combining");
 
         menuBar.add(menuFile);
         menuBar.add(menuFilters);
+        menuBar.add(menuTransformations);
         menuBar.add(menuCombines);
 
         JMenuItem menuItemNew = new JMenuItem(" New  ");
         menuFile.add(menuItemNew);
 
+        hForm = new HistoryForm();
+        hForm.setLocation(900,0);
+        hForm.undoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                image.setPicture(hForm.history.get(hForm.history.size()-2).getPicture());
+                image.repaint();
+            }
+        });
+        hForm.redoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                image.setPicture(hForm.history.get(hForm.history.size()-1).getPicture());
+                image.repaint();
+            }
+        });
+        hForm.list.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                JList list = (JList)mouseEvent.getSource();
+                if (mouseEvent.getClickCount() == 2) {
+                    int index = list.locationToIndex(mouseEvent.getPoint());
+                    image.setPicture(hForm.history.get(index).getPicture());
+                    image.repaint();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
+
         JMenuItem menuItemOpen = new JMenuItem(" Open  ");
         menuItemOpen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
                 chooser.setDirectory("C:\\");
                 chooser.setVisible(true);
@@ -51,6 +104,8 @@ public class MainForm extends JFrame{
                 {
                     System.out.println("You chose " + chooser.getFile());
                     image = new ImageForm(chooser.getDirectory()+chooser.getFile());
+                    image.setLocation(200,0);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Picture Opened"));
                 }
             }
         });
@@ -73,11 +128,15 @@ public class MainForm extends JFrame{
         menuFile.add(menuItemSave);
 
 
+        // ------------------------ F I L T E R I N G --------------------------------------------------------------
+
         JMenuItem menuItemGrayScale = new JMenuItem(" Gray scale");
         menuItemGrayScale.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(image.isVisible()){
-                    image.picture.filterGray();
+                    Filters filters = new Filters();
+                    filters.filterGray(image.picture);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Gray scale filtering"));
                     image.repaint();
                 }
             }
@@ -88,7 +147,9 @@ public class MainForm extends JFrame{
         menuItemRedFilter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(image.isVisible()){
-                    image.picture.filterRed();
+                    Filters filters = new Filters();
+                    filters.filterRed(image.picture);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Red filtering"));
                     image.repaint();
                 }
             }
@@ -99,7 +160,9 @@ public class MainForm extends JFrame{
         menuItemGreenFilter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(image.isVisible()){
-                    image.picture.filterGreen();
+                    Filters filters = new Filters();
+                    filters.filterGreen(image.picture);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Green filtering"));
                     image.repaint();
                 }
             }
@@ -110,13 +173,65 @@ public class MainForm extends JFrame{
         menuItemBlueFilter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(image.isVisible()){
-                    image.picture.filterBlue();
+                    Filters filters = new Filters();
+                    filters.filterBlue(image.picture);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Blue filtering"));
                     image.repaint();
                 }
             }
         });
         menuFilters.add(menuItemBlueFilter);
 
+        JMenuItem menuItemNegativeFilter = new JMenuItem(" Negative filter");
+        menuItemNegativeFilter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    Filters filters = new Filters();
+                    filters.filterNegative(image.picture);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Negative filtering"));
+                    image.repaint();
+                }
+            }
+        });
+        menuFilters.add(menuItemNegativeFilter);
+
+        JMenuItem menuItemSepiaFilter = new JMenuItem(" Sepia filter");
+        menuItemSepiaFilter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    Filters filters = new Filters();
+                    filters.filterSepia(image.picture);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Sepia filtering"));
+                    image.repaint();
+                }
+            }
+        });
+        menuFilters.add(menuItemSepiaFilter);
+
+        // ------------------------ T R A N S F O R M A T I O N -----------------------------------------------------
+
+        JMenuItem menuItemRotate = new JMenuItem(" Rotate");
+        menuItemRotate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    String[] values = {"30", "45", "60", "90", "120", "180"};
+
+                    Object selected = JOptionPane.showInputDialog(null, "What is the angle of rotation", "Selection", JOptionPane.DEFAULT_OPTION, null, values, "0");
+                    if ( selected != null ){
+                        String selectedString = selected.toString();
+                        Transformation transform = new Transformation();
+                        transform.rotation(image.picture, Integer.parseInt(selectedString));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Rotation"));
+                        image.repaint();
+                    }else{
+                        System.out.println("User cancelled");
+                    }
+                }
+            }
+        });
+        menuTransformations.add(menuItemRotate);
+
+        // ------------------------ C O M B I N A T I O N S ---------------------------------------------------------
 
         JMenuItem menuItemCombineImages = new JMenuItem(" Combine Images ");
         menuItemCombineImages.addActionListener(new ActionListener() {
@@ -131,8 +246,9 @@ public class MainForm extends JFrame{
                     else
                     {
                         System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
                         Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
-                        image.picture.combineImages(picture2);
+                        combinations.combineImages(image.picture, picture2);
                         image.repaint();
                     }
                 }
@@ -157,8 +273,9 @@ public class MainForm extends JFrame{
                     else
                     {
                         System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
                         Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
-                        image.picture.combineImagesMax(picture2);
+                        combinations.combineImagesMax(image.picture, picture2);
                         image.repaint();
                     }
                 }
@@ -183,8 +300,9 @@ public class MainForm extends JFrame{
                     else
                     {
                         System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
                         Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
-                        image.picture.combineImagesCycle(picture2);
+                        combinations.combineImagesCycle(image.picture, picture2);
                         image.repaint();
                     }
                 }
@@ -200,5 +318,12 @@ public class MainForm extends JFrame{
         return menuBar;
     }
 
+
+    public Picture getImage(){
+        if (image != null)
+            return image.picture;
+        else
+            return null;
+    }
 
 }
