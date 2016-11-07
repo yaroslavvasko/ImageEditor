@@ -94,4 +94,17 @@ public class Filters {
         }
     }
 
+    public void filterPersonal(Picture picture, int rKof, int gKof, int bKof){
+        for(int i = 0; i<picture.getWidth(); i++){
+            for(int k = 0; k<picture.getHeight(); k++){
+                Color c = picture.getColor(i, k);
+                int r = c.getRed();
+                int g = c.getGreen();
+                int b = c.getBlue();
+                picture.setColor(i, k, new Color(Math.min(255, r+rKof), Math.min(255, g+gKof), Math.min(255, b+bKof)));
+            }
+        }
+
+    }
+
 }

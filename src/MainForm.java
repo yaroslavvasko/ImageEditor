@@ -232,6 +232,48 @@ public class MainForm extends JFrame{
         });
         menuFilters.add(menuItemLUTFilter);
 
+        JMenuItem menuItemPersonalFilter = new JMenuItem(" Personal filter");
+        menuItemPersonalFilter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+
+                    JSlider sliderRed = new JSlider(JSlider.HORIZONTAL, 0, 255, 0);
+                    sliderRed.setMajorTickSpacing(50);
+                    sliderRed.setPaintTicks(true);
+                    sliderRed.setPaintLabels(true);
+
+                    JSlider sliderGreen = new JSlider(JSlider.HORIZONTAL, 0, 255, 0);
+                    sliderGreen.setMajorTickSpacing(50);
+                    sliderGreen.setPaintTicks(true);
+                    sliderGreen.setPaintLabels(true);
+
+                    JSlider sliderBlue = new JSlider(JSlider.HORIZONTAL, 0, 255, 0);
+                    sliderBlue.setMajorTickSpacing(50);
+                    sliderBlue.setPaintTicks(true);
+                    sliderBlue.setPaintLabels(true);
+
+                    JPanel myPanel = new JPanel();
+                    myPanel.add(new JLabel("Red color"));
+                    myPanel.add(sliderRed, "Red color");
+                    myPanel.add(new JLabel("Green color"));
+                    myPanel.add(sliderGreen, "Green color");
+                    myPanel.add(new JLabel("Blue color"));
+                    myPanel.add(sliderBlue, "Blue color");
+                    int result = JOptionPane.showConfirmDialog(null, myPanel,
+                            "Please Enter X and Y Values", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        Filters filters = new Filters();
+                        filters.filterPersonal(image.picture, sliderRed.getValue(), sliderGreen.getValue(), sliderBlue.getValue());
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Personal filtering"));
+                        image.repaint();
+                    }
+
+                    ;
+                }
+            }
+        });
+        menuFilters.add(menuItemPersonalFilter);
+
         // ------------------------ T R A N S F O R M A T I O N -----------------------------------------------------
 
         JMenuItem menuItemRotate = new JMenuItem(" Rotate");
@@ -294,6 +336,7 @@ public class MainForm extends JFrame{
                         Combinations combinations = new Combinations();
                         Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
                         combinations.combineImages(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture"));
                         image.repaint();
                     }
                 }
@@ -321,6 +364,7 @@ public class MainForm extends JFrame{
                         Combinations combinations = new Combinations();
                         Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
                         combinations.combineImagesMax(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined via max with " + chooser.getFile() + " picture"));
                         image.repaint();
                     }
                 }
@@ -348,6 +392,7 @@ public class MainForm extends JFrame{
                         Combinations combinations = new Combinations();
                         Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
                         combinations.combineImagesCycle(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined via Cycle with " + chooser.getFile() + " picture"));
                         image.repaint();
                     }
                 }
