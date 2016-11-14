@@ -36,11 +36,13 @@ public class MainForm extends JFrame{
         JMenu menuFilters = new JMenu("Filters");
         JMenu menuTransformations = new JMenu("Transformation");
         JMenu menuCombines = new JMenu("Combining");
+        JMenu menuDifference = new JMenu("Difference");
 
         menuBar.add(menuFile);
         menuBar.add(menuFilters);
         menuBar.add(menuTransformations);
         menuBar.add(menuCombines);
+        menuBar.add(menuDifference);
 
         JMenuItem menuItemNew = new JMenuItem(" New  ");
         menuFile.add(menuItemNew);
@@ -403,6 +405,234 @@ public class MainForm extends JFrame{
             }
         });
         menuCombines.add(menuItemCombineImagesCycle);
+
+        JMenuItem menuItemCombineImagesSaturation = new JMenuItem(" Combine Images with Saturation ");
+        menuItemCombineImagesSaturation.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        combinations.combineImagesSaturation(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture with Saturation"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesSaturation);
+
+        JMenuItem menuItemCombineImagesMultiply = new JMenuItem(" Combine Images Multiplying ");
+        menuItemCombineImagesMultiply.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        combinations.combineImagesMultiply(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture Multiplying"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesMultiply);
+
+        JMenuItem menuItemCombineImagesMinus = new JMenuItem(" Combine Images Minus  ");
+        menuItemCombineImagesMinus.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        combinations.combineImagesMinus(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture Minus"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesMinus);
+
+        JMenuItem menuItemCombineImagesMinusMax = new JMenuItem(" Combine Images Minus with Max  ");
+        menuItemCombineImagesMinusMax.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        combinations.combineImagesMinusMax(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture Minus with Max"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesMinusMax);
+
+        JMenuItem menuItemCombineImagesMinusCycle = new JMenuItem(" Combine Images Minus Cycle  ");
+        menuItemCombineImagesMinusCycle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        combinations.combineImagesMinusCycle(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture Minus Cycle"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesMinusCycle);
+
+
+        JMenuItem menuItemCombineImagesRealMultiply = new JMenuItem(" Combine Images via Multiply   ");
+        menuItemCombineImagesRealMultiply.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        combinations.combineImagesRealMultiply(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture Multyplying R"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesRealMultiply);
+
+        JMenuItem menuItemCombineImagesSubstruct = new JMenuItem(" Combine Images via Substruct ");
+        menuItemCombineImagesSubstruct.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Combinations combinations = new Combinations();
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        combinations.combineImagesSubstruct(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Combined with " + chooser.getFile() + " picture Substructing"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuCombines.add(menuItemCombineImagesSubstruct);
+
+        // ------------------------ D I F F E R E N C E ---------------------------------------------------------
+        JMenuItem menuItemFindDifference = new JMenuItem(" Find differences  ");
+        menuItemFindDifference.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
+                    chooser.setDirectory("C:\\");
+                    chooser.setVisible(true);
+                    String filename = chooser.getFile();
+                    if (filename == null)
+                        System.out.println("You cancelled the choice");
+                    else
+                    {
+                        System.out.println("You chose " + chooser.getFile());
+                        Picture picture2 = new Picture(chooser.getDirectory()+chooser.getFile());
+                        Differences difference = new Differences();
+                        difference.findDifference(image.picture, picture2);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Finding differences with " + chooser.getFile() + " picture"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuDifference.add(menuItemFindDifference);
+
+
 
 
         return menuBar;
