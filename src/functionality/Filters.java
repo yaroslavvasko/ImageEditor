@@ -107,4 +107,32 @@ public class Filters {
 
     }
 
+    public void filterContrastLUT(Picture picture, int a) {
+        int[] lut = new int[256];
+        int delta = 0;
+
+        for(int i = 0; i < 256; i++){
+            delta = a*(i - 128) + 128;
+            if(delta < 0) lut[i] = 0;
+            if( delta >= 0 && delta <= 255) lut[i] = Math.min(255,Math.max(0, a*(i-128)+i)) ;
+            if(delta > 256)  lut[i] = 255;
+        }
+
+        for(int i = 0; i<picture.getWidth(); i++){
+            for(int k = 0; k<picture.getHeight(); k++){
+                Color c = picture.getColor(i, k);
+                int r = c.getRed();
+                int g = c.getGreen();
+                int b = c.getBlue();
+                picture.setColor(i, k, new Color(lut[r], lut[g], lut[b]));
+            }
+        }
+    }
+
+
+    public void filterLuminanceYCbCr(Picture picture, int a){
+        picture.toYCBCR();
+        picture.luminanceYCbCr(a);
+    }
+
 }

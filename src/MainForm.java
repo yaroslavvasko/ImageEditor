@@ -1,5 +1,6 @@
 import functionality.*;
 import history.HistoryItem;
+import org.jfree.ui.RefineryUtilities;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -37,12 +38,14 @@ public class MainForm extends JFrame{
         JMenu menuTransformations = new JMenu("Transformation");
         JMenu menuCombines = new JMenu("Combining");
         JMenu menuDifference = new JMenu("Difference");
+        JMenu menuImage = new JMenu("Image");
 
         menuBar.add(menuFile);
         menuBar.add(menuFilters);
         menuBar.add(menuTransformations);
         menuBar.add(menuCombines);
         menuBar.add(menuDifference);
+        menuBar.add(menuImage);
 
         JMenuItem menuItemNew = new JMenuItem(" New  ");
         menuFile.add(menuItemNew);
@@ -234,6 +237,26 @@ public class MainForm extends JFrame{
         });
         menuFilters.add(menuItemLUTFilter);
 
+        JMenuItem menuItemLUTContrast = new JMenuItem(" LUT Contrast");
+        menuItemLUTContrast.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    Object selected = JOptionPane.showInputDialog(null, "What is LUT Contrast level", "Selection", JOptionPane.DEFAULT_OPTION, null, null, "0");
+                    if ( selected!= null ){
+                        String selectedString = selected.toString();
+
+                        Filters filters = new Filters();
+                        filters.filterContrastLUT(image.picture, Integer.parseInt(selectedString));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Image contrast LUT"));
+                        image.repaint();
+                    }else{
+                        System.out.println("User cancelled");
+                    }
+                }
+            }
+        });
+        menuFilters.add(menuItemLUTContrast);
+
         JMenuItem menuItemPersonalFilter = new JMenuItem(" Personal filter");
         menuItemPersonalFilter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
@@ -275,6 +298,26 @@ public class MainForm extends JFrame{
             }
         });
         menuFilters.add(menuItemPersonalFilter);
+
+        JMenuItem menuItemLuminanceYCbCr = new JMenuItem(" Luminance YCbCr");
+        menuItemLuminanceYCbCr.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    Object selected = JOptionPane.showInputDialog(null, "What is luminance level", "Selection", JOptionPane.DEFAULT_OPTION, null, null, "0");
+                    if ( selected!= null ){
+                        String selectedString = selected.toString();
+
+                        Filters filters = new Filters();
+                        filters.filterLuminanceYCbCr(image.picture, Integer.parseInt(selectedString));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Luminance YCbCr"));
+                        image.repaint();
+                    }else{
+                        System.out.println("User cancelled");
+                    }
+                }
+            }
+        });
+        menuFilters.add(menuItemLuminanceYCbCr);
 
         // ------------------------ T R A N S F O R M A T I O N -----------------------------------------------------
 
@@ -633,7 +676,29 @@ public class MainForm extends JFrame{
         menuDifference.add(menuItemFindDifference);
 
 
+        // ------------------------ H I S T O G R A M ---------------------------------------------------------
+        JMenuItem menuItemShowHistogram = new JMenuItem(" Show RGB Histogram  ");
+        menuItemShowHistogram.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            Histogram histogram = new Histogram(image.picture);
+                            histogram.pack();
+                            RefineryUtilities.centerFrameOnScreen(histogram);
+                            histogram.setVisible(true);
 
+                        }
+                    });
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuImage.add(menuItemShowHistogram);
 
         return menuBar;
     }

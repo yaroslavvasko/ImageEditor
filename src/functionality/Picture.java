@@ -17,6 +17,8 @@ public class Picture {
     private String filename;
     private boolean isOriginUpperLeft = true;
     private final int width, height;
+    private int[] colorStatistics;
+    private YCbCr[][] imageYCBCR;
 
     public BufferedImage getImage() {
         return image;
@@ -185,6 +187,43 @@ public class Picture {
                 if (!this.getColor(col, row).equals(that.getColor(col, row))) return false;
         return true;
     }
+
+    private void createColorsStatistics(){
+        colorStatistics = new int[768];
+        for(int k = 0; k < 256; k++){
+            for(int x = 0; x<width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(this.getColor(x,y).getRed() == k) colorStatistics[k]+=1;
+                    if(this.getColor(x,y).getGreen() == k) colorStatistics[256+k]+=1;
+                    if(this.getColor(x,y).getBlue() == k) colorStatistics[512+k]+=1;
+                }
+            }
+        }
+    }
+
+    public int[] getColorStatistics(){
+        createColorsStatistics();
+        return this.colorStatistics;
+    }
+
+    public void toYCBCR(){
+        imageYCBCR = new YCbCr[width][height];
+            for(int x = 0; x<width; x++) {
+                for (int y = 0; y < height; y++) {
+                    imageYCBCR[x][y] = new YCbCr(this.getColor(x,y));
+                }
+            }
+    }
+
+    public void luminanceYCbCr(int a){
+        for(int x = 0; x<width; x++) {
+            for (int y = 0; y < height; y++) {
+                imageYCBCR[x][y].brighten(a);
+                this.setColor(x,y, imageYCBCR[x][y].getRGB());
+            }
+        }
+    }
+
 
     public int hashCode() {
         throw new UnsupportedOperationException("hashCode() is not supported because pictures are mutable");
