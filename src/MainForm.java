@@ -102,7 +102,7 @@ public class MainForm extends JFrame{
         menuItemOpen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 FileDialog chooser = new FileDialog(new Frame(), "Choose image", FileDialog.LOAD);
-                chooser.setDirectory("C:\\");
+                chooser.setDirectory("D:\\");
                 chooser.setVisible(true);
                 String filename = chooser.getFile();
                 if (filename == null)
@@ -699,6 +699,52 @@ public class MainForm extends JFrame{
             }
         });
         menuImage.add(menuItemShowHistogram);
+
+        JMenuItem menuItemStretchHistogram = new JMenuItem(" Stertch Histogram  ");
+        menuItemStretchHistogram.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            HistogramManipulation hm = new HistogramManipulation();
+                            hm.histogramStretching(image.picture);
+                            hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Stretching histogram"));
+                            image.repaint();
+
+                        }
+                    });
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuImage.add(menuItemStretchHistogram);
+
+        JMenuItem menuItemAlignHistogram = new JMenuItem(" Histogram Alignment ");
+        menuItemAlignHistogram.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            HistogramManipulation hm = new HistogramManipulation();
+                            hm.histogramAlignment(image.picture);
+                            hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), " Histogram alignment"));
+                            image.repaint();
+
+                        }
+                    });
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        menuImage.add(menuItemAlignHistogram);
 
         return menuBar;
     }

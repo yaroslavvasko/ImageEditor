@@ -201,6 +201,7 @@ public class Picture {
         }
     }
 
+
     public int[] getColorStatistics(){
         createColorsStatistics();
         return this.colorStatistics;
