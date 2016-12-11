@@ -42,10 +42,8 @@ public class HistogramManipulation {
         for(int i = 0; i < 256; i++){
             lutRed[i] = (255/(redMax - redMin))*(i-redMin);
             lutGreen[i] = (255/(greenMax - greenMin))*(i-greenMin);
-            lutBlue[i] = (255/(blueMax - redMin))*(i-blueMin);
-
+            lutBlue[i] = (255/(blueMax - blueMin))*(i-blueMin);
         }
-
     }
 
 
@@ -82,7 +80,22 @@ public class HistogramManipulation {
     }
 
     public void histogramStretching(Picture picture){
+        /*for (int x = 0; x < picture.getWidth(); x++) {
+            for (int y = 0; y < picture.getHeight(); y++) {
+                int red = picture.getColor(x,y).getRed();
+                int green = picture.getColor(x,y).getGreen();
+                int blue = picture.getColor(x,y).getBlue();
+
+                if(red < 25) red += 100;
+                if(green < 25) green += 100;
+                if(blue < 25) blue += 100;
+
+                picture.setColor(x,y, new Color(red, green, blue));
+            }
+        }
+*/
         createLUTStretching(picture);
+
         for (int x = 0; x < picture.getWidth(); x++) {
             for (int y = 0; y < picture.getHeight(); y++) {
                 picture.setColor(x, y, new Color(

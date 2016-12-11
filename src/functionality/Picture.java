@@ -202,6 +202,8 @@ public class Picture {
     }
 
 
+
+
     public int[] getColorStatistics(){
         createColorsStatistics();
         return this.colorStatistics;
@@ -223,6 +225,10 @@ public class Picture {
                 this.setColor(x,y, imageYCBCR[x][y].getRGB());
             }
         }
+    }
+
+    public void setColorStatistics(int[] statsctics){
+        this.colorStatistics = statsctics;
     }
 
 

@@ -129,6 +129,9 @@ public class MainForm extends JFrame{
                     if(image.isVisible())
                         image.picture.save(chooser.getDirectory() + File.separator + chooser.getFile());
                 }
+                else{
+                    image.picture.save(chooser.getName());
+                }
             }
         });
         menuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -136,7 +139,7 @@ public class MainForm extends JFrame{
 
 
         // ------------------------ F I L T E R I N G --------------------------------------------------------------
-
+        JMenu colorFilters = new JMenu("Color filters ");
         JMenuItem menuItemGrayScale = new JMenuItem(" Gray scale");
         menuItemGrayScale.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
@@ -148,7 +151,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemGrayScale);
+        colorFilters.add(menuItemGrayScale);
 
         JMenuItem menuItemRedFilter = new JMenuItem(" Red filter");
         menuItemRedFilter.addActionListener(new ActionListener() {
@@ -161,7 +164,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemRedFilter);
+        colorFilters.add(menuItemRedFilter);
 
         JMenuItem menuItemGreenFilter = new JMenuItem(" Green filter");
         menuItemGreenFilter.addActionListener(new ActionListener() {
@@ -174,7 +177,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemGreenFilter);
+        colorFilters.add(menuItemGreenFilter);
 
         JMenuItem menuItemBlueFilter = new JMenuItem(" Blue filter");
         menuItemBlueFilter.addActionListener(new ActionListener() {
@@ -187,7 +190,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemBlueFilter);
+        colorFilters.add(menuItemBlueFilter);
 
         JMenuItem menuItemNegativeFilter = new JMenuItem(" Negative filter");
         menuItemNegativeFilter.addActionListener(new ActionListener() {
@@ -200,7 +203,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemNegativeFilter);
+        colorFilters.add(menuItemNegativeFilter);
 
         JMenuItem menuItemSepiaFilter = new JMenuItem(" Sepia filter");
         menuItemSepiaFilter.addActionListener(new ActionListener() {
@@ -213,7 +216,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemSepiaFilter);
+        colorFilters.add(menuItemSepiaFilter);
 
         JMenuItem menuItemLUTFilter = new JMenuItem(" LUT filter");
         menuItemLUTFilter.addActionListener(new ActionListener() {
@@ -235,7 +238,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemLUTFilter);
+        colorFilters.add(menuItemLUTFilter);
 
         JMenuItem menuItemLUTContrast = new JMenuItem(" LUT Contrast");
         menuItemLUTContrast.addActionListener(new ActionListener() {
@@ -255,7 +258,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemLUTContrast);
+        colorFilters.add(menuItemLUTContrast);
 
         JMenuItem menuItemPersonalFilter = new JMenuItem(" Personal filter");
         menuItemPersonalFilter.addActionListener(new ActionListener() {
@@ -297,7 +300,7 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemPersonalFilter);
+        colorFilters.add(menuItemPersonalFilter);
 
         JMenuItem menuItemLuminanceYCbCr = new JMenuItem(" Luminance YCbCr");
         menuItemLuminanceYCbCr.addActionListener(new ActionListener() {
@@ -317,7 +320,8 @@ public class MainForm extends JFrame{
                 }
             }
         });
-        menuFilters.add(menuItemLuminanceYCbCr);
+        colorFilters.add(menuItemLuminanceYCbCr);
+        menuFilters.add(colorFilters);
 
         // ------------------------ T R A N S F O R M A T I O N -----------------------------------------------------
 
@@ -675,6 +679,146 @@ public class MainForm extends JFrame{
         });
         menuDifference.add(menuItemFindDifference);
 
+        // ------------------------ N O I S E S ---------------------------------------------------------
+        JMenu noises = new JMenu("Noise ");
+        JMenuItem menuItemUniformNoise = new JMenuItem("Uniform Noise");
+        menuItemUniformNoise.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    JLabel minLabel = new JLabel("Min: ");
+                    JLabel maxLabel = new JLabel("Max: ");
+                    JLabel probabilityLabel = new JLabel("Probability");
+
+                    JTextField minVal = new JTextField();
+                    JTextField maxVal = new JTextField();
+                    JTextField probabilityVal = new JTextField();
+
+                    JPanel myPanel = new JPanel(new GridLayout(0,1));
+                    myPanel.add(minLabel);
+                    myPanel.add(minVal);
+                    myPanel.add(maxLabel);
+                    myPanel.add(maxVal);
+                    myPanel.add(probabilityLabel);
+                    myPanel.add(probabilityVal);
+                    int result = JOptionPane.showConfirmDialog(null, myPanel,
+                            "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        Noise noise = new Noise();
+                        noise.addUniformNoise(image.picture, Integer.parseInt(getValueOrDefault(minVal.getText(),"0")),
+                                Integer.parseInt(getValueOrDefault(maxVal.getText(),"0")),
+                                        Integer.parseInt(getValueOrDefault(probabilityVal.getText(),"0")));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Uniform noise"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        noises.add(menuItemUniformNoise);
+
+        JMenuItem menuItemGaussianNoise= new JMenuItem("Gaussian Noise");
+        menuItemGaussianNoise.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    JLabel avg = new JLabel("Average: ");
+                    JLabel dev = new JLabel("Deviation: ");
+                    JLabel probabilityLabel = new JLabel("Probability");
+
+                    JTextField avgVal = new JTextField();
+                    JTextField devVal = new JTextField();
+                    JTextField probabilityVal = new JTextField();
+
+                    JPanel myPanel = new JPanel(new GridLayout(0,1));
+                    myPanel.add(avg);
+                    myPanel.add(avgVal);
+                    myPanel.add(dev);
+                    myPanel.add(devVal);
+                    myPanel.add(probabilityLabel);
+                    myPanel.add(probabilityVal);
+                    int result = JOptionPane.showConfirmDialog(null, myPanel,
+                            "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        Noise noise = new Noise();
+                        noise.addGaussianNoise(image.picture, Integer.parseInt(getValueOrDefault(avgVal.getText(),"0")),
+                                Integer.parseInt(getValueOrDefault(devVal.getText(),"0")),
+                                Integer.parseInt(getValueOrDefault(probabilityVal.getText(),"0")));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Gaussian noise"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        noises.add(menuItemGaussianNoise);
+
+        JMenuItem menuItemSaltPepperNoise= new JMenuItem("Salt & Pepper Noise");
+        menuItemSaltPepperNoise.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    JLabel probabilityLabel = new JLabel("Probability");
+                    JTextField probabilityVal = new JTextField();
+
+                    JPanel myPanel = new JPanel(new GridLayout(0,1));
+                    myPanel.add(probabilityLabel);
+                    myPanel.add(probabilityVal);
+                    int result = JOptionPane.showConfirmDialog(null, myPanel,
+                            "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        Noise noise = new Noise();
+                        noise.addSaltPepper(image.picture, Integer.parseInt(getValueOrDefault(probabilityVal.getText(),"0")));
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Salt & Pepper Noise"));
+                        image.repaint();
+                    }
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        noises.add(menuItemSaltPepperNoise);
+
+        JMenuItem menuItemAvgFilter= new JMenuItem("Average value filter");
+        menuItemAvgFilter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                        Noise noise = new Noise();
+                        noise.addAvgFilter(image.picture);
+                        hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Average value filter"));
+                        image.repaint();
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        noises.add(menuItemAvgFilter);
+
+        JMenuItem menuItemMedianFilter= new JMenuItem("Median value filter");
+        menuItemMedianFilter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(image.isVisible()){
+                    Noise noise = new Noise();
+                    noise.addMedianFilter(image.picture);
+                    hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Median value filter"));
+                    image.repaint();
+                }
+                else
+                {
+                    System.out.println("No start image");
+                }
+            }
+        });
+        noises.add(menuItemMedianFilter);
+
+        menuFilters.add(noises);
 
         // ------------------------ H I S T O G R A M ---------------------------------------------------------
         JMenuItem menuItemShowHistogram = new JMenuItem(" Show RGB Histogram  ");
@@ -711,7 +855,6 @@ public class MainForm extends JFrame{
                             hm.histogramStretching(image.picture);
                             hForm.addHistoryItem(new HistoryItem(new Picture(image.picture), "Stretching histogram"));
                             image.repaint();
-
                         }
                     });
                 }
@@ -749,6 +892,11 @@ public class MainForm extends JFrame{
         return menuBar;
     }
 
+    public String getValueOrDefault(String value, String def){
+        if(value.equals(""))
+            return def;
+        else return value;
+    }
 
     public Picture getImage(){
         if (image != null)
